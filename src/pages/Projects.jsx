@@ -8,15 +8,19 @@ import {
 } from "lucide-react";
 import AppLayout from "../components/layout/AppLayout";
 import ProjectCard from "../components/projects/ProjectCard";
+import ProjectForm from "../components/projects/ProjectForm";
 import { useProjects } from "../context/ProjectsContext";
 
 const filters = ["All", "In Progress", "Planning", "Completed", "On Hold"];
 
 function Projects() {
-  const { projects } = useProjects();
+  const { projects, addProject, updateProject } = useProjects();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
   const [sortBy, setSortBy] = useState("name");
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
 
   const projectList = Array.isArray(projects) ? projects : [];
 
@@ -68,6 +72,31 @@ function Projects() {
       )
     : 0;
 
+  function openCreateForm() {
+    setEditingProject(null);
+    setIsFormOpen(true);
+  }
+
+  function openEditForm(project) {
+    setEditingProject(project);
+    setIsFormOpen(true);
+  }
+
+  function closeForm() {
+    setIsFormOpen(false);
+    setEditingProject(null);
+  }
+
+  function handleProjectSubmit(projectData) {
+    if (editingProject) {
+      updateProject(editingProject.id, projectData);
+    } else {
+      addProject(projectData);
+    }
+
+    closeForm();
+  }
+
   return (
     <AppLayout pageTitle="Projects">
       <div className="space-y-6">
@@ -83,9 +112,8 @@ function Projects() {
 
           <button
             type="button"
-            disabled
-            title="Project creation is coming in the next feature"
-            className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white opacity-70 shadow-sm"
+            onClick={openCreateForm}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200"
           >
             <Plus size={17} />
             New project
@@ -208,7 +236,7 @@ function Projects() {
                 <ProjectCard
                   key={project.id}
                   project={project}
-                  onEdit={() => {}}
+                  onEdit={openEditForm}
                   onDelete={() => {}}
                 />
               ))}
@@ -238,6 +266,14 @@ function Projects() {
           )}
         </section>
       </div>
+
+      {isFormOpen && (
+        <ProjectForm
+          project={editingProject}
+          onSubmit={handleProjectSubmit}
+          onClose={closeForm}
+        />
+      )}
     </AppLayout>
   );
 }
