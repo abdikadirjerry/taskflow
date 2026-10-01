@@ -9,18 +9,20 @@ import {
 import AppLayout from "../components/layout/AppLayout";
 import ProjectCard from "../components/projects/ProjectCard";
 import ProjectForm from "../components/projects/ProjectForm";
+import DeleteProjectModal from "../components/projects/DeleteProjectModal";
 import { useProjects } from "../context/ProjectsContext";
 
 const filters = ["All", "In Progress", "Planning", "Completed", "On Hold"];
 
 function Projects() {
-  const { projects, addProject, updateProject } = useProjects();
+  const { projects, addProject, updateProject, deleteProject } = useProjects();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
   const [sortBy, setSortBy] = useState("name");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+  const [deletingProject, setDeletingProject] = useState(null);
 
   const projectList = Array.isArray(projects) ? projects : [];
 
@@ -95,6 +97,21 @@ function Projects() {
     }
 
     closeForm();
+  }
+
+  function openDeleteConfirmation(project) {
+    setDeletingProject(project);
+  }
+
+  function closeDeleteConfirmation() {
+    setDeletingProject(null);
+  }
+
+  function confirmDeleteProject() {
+    if (!deletingProject) return;
+
+    deleteProject(deletingProject.id);
+    closeDeleteConfirmation();
   }
 
   return (
@@ -237,7 +254,7 @@ function Projects() {
                   key={project.id}
                   project={project}
                   onEdit={openEditForm}
-                  onDelete={() => {}}
+                  onDelete={openDeleteConfirmation}
                 />
               ))}
             </div>
@@ -272,6 +289,14 @@ function Projects() {
           project={editingProject}
           onSubmit={handleProjectSubmit}
           onClose={closeForm}
+        />
+      )}
+
+      {deletingProject && (
+        <DeleteProjectModal
+          project={deletingProject}
+          onConfirm={confirmDeleteProject}
+          onClose={closeDeleteConfirmation}
         />
       )}
     </AppLayout>
