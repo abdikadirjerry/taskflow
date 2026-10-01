@@ -1,0 +1,73 @@
+export const initialTasks = [
+  {
+    id: "task-1",
+    title: "Design the landing page",
+    description:
+      "Create the initial landing page layout and responsive design.",
+    projectId: "1",
+    status: "In Progress",
+    priority: "High",
+    dueDate: "2026-10-08",
+    assignee: "Alex Morgan",
+    createdAt: "2026-09-25T09:00:00.000Z",
+  },
+  {
+    id: "task-2",
+    title: "Set up authentication",
+    description: "Implement the login and registration user interface.",
+    projectId: "1",
+    status: "Todo",
+    priority: "High",
+    dueDate: "2026-10-12",
+    assignee: "Sarah Chen",
+    createdAt: "2026-09-26T10:00:00.000Z",
+  },
+  {
+    id: "task-3",
+    title: "Build the analytics dashboard",
+    description: "Create dashboard charts and summary cards.",
+    projectId: "2",
+    status: "In Progress",
+    priority: "Medium",
+    dueDate: "2026-10-10",
+    assignee: "James Wilson",
+    createdAt: "2026-09-27T08:30:00.000Z",
+  },
+  {
+    id: "task-4",
+    title: "Review mobile layouts",
+    description: "Check responsive behavior on mobile and tablet screens.",
+    projectId: "2",
+    status: "Todo",
+    priority: "Low",
+    dueDate: "2026-10-15",
+    assignee: "Emily Davis",
+    createdAt: "2026-09-28T11:00:00.000Z",
+  },
+  {
+    id: "task-5",
+    title: "Prepare project documentation",
+    description: "Document the setup process and main application features.",
+    projectId: "3",
+    status: "Done",
+    priority: "Medium",
+    dueDate: "2026-10-03",
+    assignee: "Alex Morgan",
+    createdAt: "2026-09-24T13:00:00.000Z",
+  },
+  {
+    id: "task-6",
+    title: "Test project navigation",
+    description: "Verify links, routes, and project detail navigation.",
+    projectId: "3",
+    status: "Todo",
+    priority: "High",
+    dueDate: "2026-10-09",
+    assignee: "Sarah Chen",
+    createdAt: "2026-09-29T14:00:00.000Z",
+  },
+];
+
+export const taskStatuses = ["Todo", "In Progress", "Done"];
+
+export const taskPriorities = ["Low", "Medium", "High"];
