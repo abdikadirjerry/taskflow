@@ -28,12 +28,11 @@ const columns = [
   },
 ];
 
-function TaskBoard({ tasks, projects }) {
+function TaskBoard({ tasks, projects, onEdit, onStatusChange, onDelete }) {
   const getProjectName = (projectId) => {
     const project = projects.find(
       (item) => String(item.id) === String(projectId),
     );
-
     return project?.name ?? project?.title ?? "Unassigned project";
   };
 
@@ -56,7 +55,6 @@ function TaskBoard({ tasks, projects }) {
                 <div className="mt-0.5 rounded-lg bg-white p-2 shadow-sm">
                   <Icon size={16} className={column.iconClass} />
                 </div>
-
                 <div className="min-w-0">
                   <h2 className="text-sm font-bold text-slate-800">
                     {column.title}
@@ -66,7 +64,6 @@ function TaskBoard({ tasks, projects }) {
                   </p>
                 </div>
               </div>
-
               <span
                 className={`rounded-full px-2.5 py-1 text-xs font-bold ${column.countClass}`}
               >
@@ -75,12 +72,15 @@ function TaskBoard({ tasks, projects }) {
             </div>
 
             <div className="flex flex-col gap-3">
-              {columnTasks.length > 0 ? (
+              {columnTasks.length ? (
                 columnTasks.map((task) => (
                   <TaskCard
                     key={task.id}
                     task={task}
                     projectName={getProjectName(task.projectId)}
+                    onEdit={onEdit}
+                    onStatusChange={onStatusChange}
+                    onDelete={onDelete}
                   />
                 ))
               ) : (

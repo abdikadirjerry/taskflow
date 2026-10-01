@@ -10,6 +10,7 @@ import {
   Search,
 } from "lucide-react";
 import AppLayout from "../components/layout/AppLayout";
+import DeleteTaskModal from "../components/tasks/DeleteTaskModal";
 import TaskBoard from "../components/tasks/TaskBoard";
 import TaskForm from "../components/tasks/TaskForm";
 import TaskList from "../components/tasks/TaskList";
@@ -41,7 +42,7 @@ function SummaryCard({ label, value, icon: Icon, iconClass, iconBg }) {
 }
 
 function Tasks() {
-  const { tasks, addTask, updateTask } = useTasks();
+  const { tasks, addTask, updateTask, deleteTask } = useTasks();
   const { projects = [] } = useProjects();
 
   const [view, setView] = useState("board");
@@ -49,6 +50,7 @@ function Tasks() {
   const [statusFilter, setStatusFilter] = useState("All tasks");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [taskToDelete, setTaskToDelete] = useState(null);
 
   const stats = useMemo(
     () => ({
@@ -78,7 +80,6 @@ function Tasks() {
 
       const matchesStatus =
         statusFilter === "All tasks" || task.status === statusFilter;
-
       return matchesSearch && matchesStatus;
     });
   }, [tasks, projects, search, statusFilter]);
@@ -104,8 +105,16 @@ function Tasks() {
     } else {
       addTask(taskData);
     }
-
     closeForm();
+  };
+
+  const handleStatusChange = (taskId, status) => {
+    updateTask(taskId, { status });
+  };
+
+  const handleDelete = (taskId) => {
+    deleteTask(taskId);
+    setTaskToDelete(null);
   };
 
   return (
@@ -230,11 +239,7 @@ function Tasks() {
                   aria-label="Board view"
                   aria-pressed={view === "board"}
                   title="Board view"
-                  className={`rounded-lg p-2 transition ${
-                    view === "board"
-                      ? "bg-indigo-50 text-indigo-700"
-                      : "text-slate-400 hover:bg-slate-50 hover:text-slate-700"
-                  }`}
+                  className={`rounded-lg p-2 transition ${view === "board" ? "bg-indigo-50 text-indigo-700" : "text-slate-400 hover:bg-slate-50 hover:text-slate-700"}`}
                 >
                   <LayoutGrid size={17} />
                 </button>
@@ -244,11 +249,7 @@ function Tasks() {
                   aria-label="List view"
                   aria-pressed={view === "list"}
                   title="List view"
-                  className={`rounded-lg p-2 transition ${
-                    view === "list"
-                      ? "bg-indigo-50 text-indigo-700"
-                      : "text-slate-400 hover:bg-slate-50 hover:text-slate-700"
-                  }`}
+                  className={`rounded-lg p-2 transition ${view === "list" ? "bg-indigo-50 text-indigo-700" : "text-slate-400 hover:bg-slate-50 hover:text-slate-700"}`}
                 >
                   <List size={17} />
                 </button>
@@ -267,9 +268,21 @@ function Tasks() {
           </div>
 
           {view === "board" ? (
-            <TaskBoard tasks={filteredTasks} projects={projects} />
+            <TaskBoard
+              tasks={filteredTasks}
+              projects={projects}
+              onEdit={openEditForm}
+              onStatusChange={handleStatusChange}
+              onDelete={setTaskToDelete}
+            />
           ) : (
-            <TaskList tasks={filteredTasks} projects={projects} />
+            <TaskList
+              tasks={filteredTasks}
+              projects={projects}
+              onEdit={openEditForm}
+              onStatusChange={handleStatusChange}
+              onDelete={setTaskToDelete}
+            />
           )}
         </section>
 
@@ -279,6 +292,14 @@ function Tasks() {
             projects={projects}
             onSubmit={handleSubmit}
             onClose={closeForm}
+          />
+        )}
+
+        {taskToDelete && (
+          <DeleteTaskModal
+            task={taskToDelete}
+            onConfirm={handleDelete}
+            onCancel={() => setTaskToDelete(null)}
           />
         )}
       </main>
