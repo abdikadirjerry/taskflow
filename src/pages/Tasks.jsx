@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import AppLayout from "../components/layout/AppLayout";
 import TaskBoard from "../components/tasks/TaskBoard";
+import TaskForm from "../components/tasks/TaskForm";
 import TaskList from "../components/tasks/TaskList";
 import { useProjects } from "../context/ProjectsContext";
 import { useTasks } from "../context/TasksContext";
@@ -40,12 +41,14 @@ function SummaryCard({ label, value, icon: Icon, iconClass, iconBg }) {
 }
 
 function Tasks() {
-  const { tasks } = useTasks();
+  const { tasks, addTask, updateTask } = useTasks();
   const { projects = [] } = useProjects();
 
   const [view, setView] = useState("board");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All tasks");
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   const stats = useMemo(
     () => ({
@@ -80,6 +83,31 @@ function Tasks() {
     });
   }, [tasks, projects, search, statusFilter]);
 
+  const openCreateForm = () => {
+    setSelectedTask(null);
+    setIsFormOpen(true);
+  };
+
+  const openEditForm = (task) => {
+    setSelectedTask(task);
+    setIsFormOpen(true);
+  };
+
+  const closeForm = () => {
+    setIsFormOpen(false);
+    setSelectedTask(null);
+  };
+
+  const handleSubmit = (taskData) => {
+    if (selectedTask) {
+      updateTask(selectedTask.id, taskData);
+    } else {
+      addTask(taskData);
+    }
+
+    closeForm();
+  };
+
   return (
     <AppLayout>
       <main className="min-w-0 space-y-6 pb-8">
@@ -99,14 +127,28 @@ function Tasks() {
 
           <button
             type="button"
-            disabled
-            title="Task creation will be enabled in the next feature"
-            className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white opacity-70 shadow-sm"
+            onClick={openCreateForm}
+            disabled={projects.length === 0}
+            title={
+              projects.length === 0
+                ? "Create a project before adding tasks"
+                : "Create a new task"
+            }
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-100 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Plus size={17} />
             New task
           </button>
         </div>
+
+        {projects.length === 0 && (
+          <div
+            role="status"
+            className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+          >
+            Create a project before adding tasks.
+          </div>
+        )}
 
         <section
           aria-label="Task statistics"
@@ -230,6 +272,15 @@ function Tasks() {
             <TaskList tasks={filteredTasks} projects={projects} />
           )}
         </section>
+
+        {isFormOpen && (
+          <TaskForm
+            task={selectedTask}
+            projects={projects}
+            onSubmit={handleSubmit}
+            onClose={closeForm}
+          />
+        )}
       </main>
     </AppLayout>
   );
