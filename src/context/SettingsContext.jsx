@@ -23,37 +23,80 @@ const defaultSettings = {
   },
 };
 
-export function SettingsProvider({ children }) {
-  const [settings, setSettings] = useState(() => {
-    try {
-      const storedSettings = localStorage.getItem(STORAGE_KEY);
+function getInitialSettings() {
+  try {
+    const storedSettings = localStorage.getItem(STORAGE_KEY);
 
-      if (!storedSettings) {
-        return defaultSettings;
-      }
-
-      const parsedSettings = JSON.parse(storedSettings);
-
-      return {
-        ...defaultSettings,
-        ...parsedSettings,
-        profile: {
-          ...defaultSettings.profile,
-          ...parsedSettings.profile,
-        },
-        preferences: {
-          ...defaultSettings.preferences,
-          ...parsedSettings.preferences,
-        },
-      };
-    } catch {
+    if (!storedSettings) {
       return defaultSettings;
     }
-  });
+
+    const parsedSettings = JSON.parse(storedSettings);
+
+    return {
+      ...defaultSettings,
+      ...parsedSettings,
+      profile: {
+        ...defaultSettings.profile,
+        ...parsedSettings.profile,
+      },
+      preferences: {
+        ...defaultSettings.preferences,
+        ...parsedSettings.preferences,
+      },
+    };
+  } catch {
+    return defaultSettings;
+  }
+}
+
+export function SettingsProvider({ children }) {
+  const [settings, setSettings] = useState(getInitialSettings);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
   }, [settings]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    function applyTheme() {
+      const theme = settings.preferences.theme;
+
+      const shouldUseDark =
+        theme === "dark" ||
+        (theme === "system" &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+      root.classList.toggle("theme-dark", shouldUseDark);
+      root.classList.toggle("theme-light", !shouldUseDark);
+    }
+
+    applyTheme();
+
+    if (settings.preferences.theme !== "system") {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handleSystemThemeChange = () => {
+      applyTheme();
+    };
+
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleSystemThemeChange);
+    };
+  }, [settings.preferences.theme]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle(
+      "compact-mode",
+      settings.preferences.compactMode,
+    );
+  }, [settings.preferences.compactMode]);
 
   const updateProfile = (profileUpdates) => {
     setSettings((current) => ({
