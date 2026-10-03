@@ -6,6 +6,7 @@ import ProjectDetails from "./pages/ProjectDetails";
 import Tasks from "./pages/Tasks";
 import Team from "./pages/Team";
 import Calendar from "./pages/Calendar";
+import Analytics from "./pages/Analytics";
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
         <Route path="/team" element={<Team />} />
 
         <Route path="/calendar" element={<Calendar />} />
+
+        <Route path="/analytics" element={<Analytics />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
