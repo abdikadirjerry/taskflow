@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Settings,
   Users,
+  Bell,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -40,6 +41,11 @@ const navigation = [
     path: "/analytics",
     icon: BarChart3,
   },
+  {
+  label: "Notifications",
+  path: "/notifications",
+  icon: Bell,
+},
 ];
 
 function Sidebar() {
