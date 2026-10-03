@@ -1,15 +1,24 @@
-import { Menu } from "lucide-react";
-import { Link } from "react-router-dom";
+import { LogOut, Menu } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
+import { useAuth } from "../../context/AuthContext";
+import { useSettings } from "../../context/SettingsContext";
 import GlobalSearch from "../search/GlobalSearch";
 import NotificationBell from "../notifications/NotificationBell";
 import Avatar from "../ui/Avatar";
-import { useSettings } from "../../context/SettingsContext";
 
 function Topbar({ onMenuClick }) {
+  const navigate = useNavigate();
+
+  const { logout } = useAuth();
   const { settings } = useSettings();
 
   const { name, role } = settings.profile;
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
@@ -52,6 +61,16 @@ function Topbar({ onMenuClick }) {
             <p className="max-w-32 truncate text-xs text-slate-500">{role}</p>
           </div>
         </Link>
+
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition hover:bg-red-50 hover:text-red-600"
+          aria-label="Sign out"
+          title="Sign out"
+        >
+          <LogOut size={19} />
+        </button>
       </div>
     </header>
   );
