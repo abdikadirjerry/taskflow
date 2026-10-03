@@ -13,16 +13,45 @@
 
   color: #172033;
   background: #f8fafc;
+
+  color-scheme: light;
+}
+
+:root.theme-dark {
+  color: #e2e8f0;
+  background: #0f172a;
+  color-scheme: dark;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: #f8fafc;
+  scroll-behavior: smooth;
+}
+
+html.theme-dark {
+  background: #0f172a;
+}
+
 body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  background: #f8fafc;
+  color: #172033;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.theme-dark body {
+  background: #0f172a;
+  color: #e2e8f0;
 }
 
 button,
@@ -36,11 +65,228 @@ button {
   cursor: pointer;
 }
 
+button:disabled {
+  cursor: not-allowed;
+}
+
 a {
   color: inherit;
   text-decoration: none;
 }
 
+img {
+  max-width: 100%;
+  display: block;
+}
+
 #root {
   min-height: 100vh;
+}
+
+/* -------------------------------------------------------
+   Accessibility
+------------------------------------------------------- */
+
+:focus-visible {
+  outline: 3px solid rgba(99, 102, 241, 0.45);
+  outline-offset: 2px;
+}
+
+.theme-dark :focus-visible {
+  outline-color: rgba(129, 140, 248, 0.7);
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.2);
+}
+
+/* -------------------------------------------------------
+   Theme transitions
+------------------------------------------------------- */
+
+body,
+.theme-dark .bg-white,
+.theme-dark .bg-slate-50,
+.theme-dark .bg-slate-100,
+.theme-dark .border-slate-200,
+.theme-dark .border-slate-100 {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+/* -------------------------------------------------------
+   Dark theme
+------------------------------------------------------- */
+
+.theme-dark .bg-white {
+  background-color: #1e293b !important;
+}
+
+.theme-dark .bg-slate-50 {
+  background-color: #0f172a !important;
+}
+
+.theme-dark .bg-slate-100 {
+  background-color: #1e293b !important;
+}
+
+.theme-dark .bg-slate-200 {
+  background-color: #334155 !important;
+}
+
+.theme-dark .border-slate-100 {
+  border-color: #334155 !important;
+}
+
+.theme-dark .border-slate-200 {
+  border-color: #334155 !important;
+}
+
+.theme-dark .border-slate-300 {
+  border-color: #475569 !important;
+}
+
+.theme-dark .text-slate-900 {
+  color: #f1f5f9 !important;
+}
+
+.theme-dark .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+
+.theme-dark .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+.theme-dark .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+.theme-dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+.theme-dark .text-slate-400 {
+  color: #64748b !important;
+}
+
+.theme-dark .divide-slate-100 > :not(:last-child) {
+  border-color: #334155 !important;
+}
+
+.theme-dark .hover\:bg-slate-50:hover {
+  background-color: #334155 !important;
+}
+
+.theme-dark .hover\:bg-slate-100:hover {
+  background-color: #334155 !important;
+}
+
+.theme-dark .hover\:border-slate-300:hover {
+  border-color: #64748b !important;
+}
+
+.theme-dark input,
+.theme-dark textarea,
+.theme-dark select {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  border-color: #475569;
+}
+
+.theme-dark input::placeholder,
+.theme-dark textarea::placeholder {
+  color: #64748b;
+}
+
+.theme-dark input:focus,
+.theme-dark textarea:focus,
+.theme-dark select:focus {
+  border-color: #818cf8;
+}
+
+/* Common indigo surfaces in dark mode */
+
+.theme-dark .bg-indigo-50 {
+  background-color: rgba(79, 70, 229, 0.16) !important;
+}
+
+.theme-dark .border-indigo-100 {
+  border-color: rgba(129, 140, 248, 0.25) !important;
+}
+
+/* -------------------------------------------------------
+   Compact mode
+------------------------------------------------------- */
+
+.compact-mode .p-8 {
+  padding: 1.5rem;
+}
+
+.compact-mode .p-6 {
+  padding: 1rem;
+}
+
+.compact-mode .p-5 {
+  padding: 0.875rem;
+}
+
+.compact-mode .py-5 {
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
+}
+
+.compact-mode .py-4 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.compact-mode .gap-6 {
+  gap: 1rem;
+}
+
+.compact-mode .gap-5 {
+  gap: 0.875rem;
+}
+
+.compact-mode .space-y-6 > :not(:first-child) {
+  margin-top: 1rem;
+}
+
+/* -------------------------------------------------------
+   Motion accessibility
+------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* -------------------------------------------------------
+   Mobile accessibility
+------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
 }
