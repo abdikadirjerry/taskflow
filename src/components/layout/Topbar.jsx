@@ -1,11 +1,16 @@
 import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import Avatar from "../ui/Avatar";
 import GlobalSearch from "../search/GlobalSearch";
 import NotificationBell from "../notifications/NotificationBell";
+import Avatar from "../ui/Avatar";
+import { useSettings } from "../../context/SettingsContext";
 
 function Topbar({ onMenuClick }) {
+  const { settings } = useSettings();
+
+  const { name, role } = settings.profile;
+
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
       <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -33,17 +38,20 @@ function Topbar({ onMenuClick }) {
 
         <div className="hidden h-6 w-px bg-slate-200 sm:block" />
 
-        <div className="flex items-center gap-2">
-          <Avatar name="Alex Morgan" size="sm" />
+        <Link
+          to="/profile"
+          className="flex items-center gap-2 rounded-xl px-2 py-1.5 transition hover:bg-slate-50"
+        >
+          <Avatar name={name} size="sm" />
 
           <div className="hidden min-w-0 md:block">
-            <p className="truncate text-sm font-semibold text-slate-900">
-              Alex Morgan
+            <p className="max-w-32 truncate text-sm font-semibold text-slate-900">
+              {name}
             </p>
 
-            <p className="text-xs text-slate-500">Administrator</p>
+            <p className="max-w-32 truncate text-xs text-slate-500">{role}</p>
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   );
