@@ -7,6 +7,7 @@ import Tasks from "./pages/Tasks";
 import Team from "./pages/Team";
 import Calendar from "./pages/Calendar";
 import Analytics from "./pages/Analytics";
+import Notifications from "./pages/Notifications";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
         <Route path="/calendar" element={<Calendar />} />
 
         <Route path="/analytics" element={<Analytics />} />
+
+        <Route path="/notifications" element={<Notifications />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

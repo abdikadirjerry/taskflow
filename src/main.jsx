@@ -1,19 +1,24 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import React from "react";
+import ReactDOM from "react-dom/client";
+
 import App from "./App";
 import "./index.css";
+
 import { ProjectsProvider } from "./context/ProjectsContext";
 import { TasksProvider } from "./context/TasksContext";
 import { TeamProvider } from "./context/TeamContext";
+import { NotificationProvider } from "./context/NotificationContext";
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
     <ProjectsProvider>
       <TasksProvider>
         <TeamProvider>
-          <App />
+          <NotificationProvider>
+            <App />
+          </NotificationProvider>
         </TeamProvider>
       </TasksProvider>
     </ProjectsProvider>
-  </StrictMode>,
+  </React.StrictMode>,
 );
