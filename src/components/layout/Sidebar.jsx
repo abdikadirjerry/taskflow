@@ -1,12 +1,13 @@
 import {
   BarChart3,
+  Bell,
   CalendarDays,
   CheckSquare,
   FolderKanban,
   LayoutDashboard,
   Settings,
+  UserCircle,
   Users,
-  Bell,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -42,10 +43,15 @@ const navigation = [
     icon: BarChart3,
   },
   {
-  label: "Notifications",
-  path: "/notifications",
-  icon: Bell,
-},
+    label: "Notifications",
+    path: "/notifications",
+    icon: Bell,
+  },
+  {
+    label: "Profile",
+    path: "/profile",
+    icon: UserCircle,
+  },
 ];
 
 function Sidebar() {

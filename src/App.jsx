@@ -1,14 +1,16 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import Analytics from "./pages/Analytics";
+import Calendar from "./pages/Calendar";
 import Dashboard from "./pages/Dashboard";
-import Projects from "./pages/Projects";
+import Notifications from "./pages/Notifications";
+import Profile from "./pages/Profile";
 import ProjectDetails from "./pages/ProjectDetails";
+import Projects from "./pages/Projects";
+import Search from "./pages/Search";
+import Settings from "./pages/Settings";
 import Tasks from "./pages/Tasks";
 import Team from "./pages/Team";
-import Calendar from "./pages/Calendar";
-import Analytics from "./pages/Analytics";
-import Notifications from "./pages/Notifications";
-import Search from "./pages/Search";
 
 function App() {
   return (
@@ -31,6 +33,10 @@ function App() {
         <Route path="/notifications" element={<Notifications />} />
 
         <Route path="/search" element={<Search />} />
+
+        <Route path="/profile" element={<Profile />} />
+
+        <Route path="/settings" element={<Settings />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
